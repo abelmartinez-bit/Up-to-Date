@@ -2,6 +2,10 @@
 
 A modern, real-time global news aggregation web application built with React that displays breaking news from multiple categories worldwide.
 
+## 🚀 **[View Live Demo](https://abelmartinez-bit.github.io/Up-to-Date)** 
+
+---
+
 ## Features ✨
 
 - **Real-time News Updates**: Auto-refreshes every 5-10 minutes
@@ -68,6 +72,28 @@ A modern, real-time global news aggregation web application built with React tha
    ```
 
 5. **Open your browser**:
+   - Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Deployment 🚀
+
+This app is deployed on GitHub Pages! 
+
+**Live URL:** [https://abelmartinez-bit.github.io/Up-to-Date](https://abelmartinez-bit.github.io/Up-to-Date)
+
+### Deploy Your Own Version
+
+```bash
+# Deploy to GitHub Pages
+npm run deploy
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
+
+## Project Structure 📁
+
+```
+Up To Date/
+````5. **Open your browser**:
    - Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## Project Structure 📁
