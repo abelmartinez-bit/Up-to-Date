@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_CONFIG } from '../config/constants';
 
 // Use CORS proxy to bypass News API browser restrictions
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const CORS_PROXY = 'https://corsproxy.io/?';
 
 const api = axios.create({
   timeout: 10000,
