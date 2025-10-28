@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_CONFIG } from '../config/constants';
 
-// GNews API supports CORS - no proxy needed!
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: 10000,
@@ -12,12 +11,14 @@ const api = axios.create({
  */
 export const fetchNewsByCategory = async (categoryQuery, page = 1) => {
   try {
-    const response = await api.get('/search', {
+    const response = await api.get('/everything', {
       params: {
         q: categoryQuery,
-        apikey: API_CONFIG.API_KEY,
-        max: API_CONFIG.PAGE_SIZE,
-        lang: 'en',
+        apiKey: API_CONFIG.API_KEY,
+        pageSize: API_CONFIG.PAGE_SIZE,
+        page: page,
+        sortBy: 'publishedAt',
+        language: 'en',
       },
     });
     return response.data;
@@ -33,16 +34,17 @@ export const searchNews = async (query, fromDate = null) => {
   try {
     const params = {
       q: query,
-      apikey: API_CONFIG.API_KEY,
-      max: API_CONFIG.PAGE_SIZE,
-      lang: 'en',
+      apiKey: API_CONFIG.API_KEY,
+      pageSize: API_CONFIG.PAGE_SIZE,
+      sortBy: 'publishedAt',
+      language: 'en',
     };
 
     if (fromDate) {
-      params.from = fromDate + 'T00:00:00Z';
+      params.from = fromDate;
     }
 
-    const response = await api.get('/search', { params });
+    const response = await api.get('/everything', { params });
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -57,8 +59,8 @@ export const fetchTopHeadlines = async (country = 'us') => {
     const response = await api.get('/top-headlines', {
       params: {
         country: country,
-        apikey: API_CONFIG.API_KEY,
-        max: API_CONFIG.PAGE_SIZE,
+        apiKey: API_CONFIG.API_KEY,
+        pageSize: API_CONFIG.PAGE_SIZE,
       },
     });
     return response.data;

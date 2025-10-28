@@ -62,8 +62,8 @@ export const NEWS_CATEGORIES = [
 ];
 
 export const API_CONFIG = {
-  BASE_URL: 'https://gnews.io/api/v4',
-  API_KEY: 'f79fa4e5f0a0e67df96f9b03c74a0cd0', // GNews API - supports CORS in browsers
+  BASE_URL: 'https://newsapi.org/v2',
+  API_KEY: '07b0697c74a14f83b414efbe4269d714',
   PAGE_SIZE: 20,
   REFRESH_INTERVAL: 5 * 60 * 1000, // 5 minutes
 };
