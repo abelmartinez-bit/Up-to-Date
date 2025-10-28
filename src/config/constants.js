@@ -63,7 +63,7 @@ export const NEWS_CATEGORIES = [
 
 export const API_CONFIG = {
   BASE_URL: 'https://newsapi.org/v2',
-  API_KEY: process.env.REACT_APP_NEWS_API_KEY,
+  API_KEY: process.env.REACT_APP_NEWS_API_KEY || '07b0697c74a14f83b414efbe4269d714',
   PAGE_SIZE: 20,
   REFRESH_INTERVAL: 5 * 60 * 1000, // 5 minutes
 };
