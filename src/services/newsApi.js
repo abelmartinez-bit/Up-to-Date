@@ -1,26 +1,36 @@
 import axios from 'axios';
 import { API_CONFIG } from '../config/constants';
 
+// Use CORS proxy to bypass News API browser restrictions
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+
 const api = axios.create({
-  baseURL: API_CONFIG.BASE_URL,
   timeout: 10000,
 });
+
+/**
+ * Build full URL with CORS proxy
+ */
+const buildProxyUrl = (endpoint, params) => {
+  const url = new URL(endpoint, API_CONFIG.BASE_URL);
+  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+  return CORS_PROXY + encodeURIComponent(url.toString());
+};
 
 /**
  * Fetch news articles by category
  */
 export const fetchNewsByCategory = async (categoryQuery, page = 1) => {
   try {
-    const response = await api.get('/everything', {
-      params: {
-        q: categoryQuery,
-        apiKey: API_CONFIG.API_KEY,
-        pageSize: API_CONFIG.PAGE_SIZE,
-        page: page,
-        sortBy: 'publishedAt',
-        language: 'en',
-      },
+    const url = buildProxyUrl('/everything', {
+      q: categoryQuery,
+      apiKey: API_CONFIG.API_KEY,
+      pageSize: API_CONFIG.PAGE_SIZE,
+      page: page,
+      sortBy: 'publishedAt',
+      language: 'en',
     });
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -44,7 +54,8 @@ export const searchNews = async (query, fromDate = null) => {
       params.from = fromDate;
     }
 
-    const response = await api.get('/everything', { params });
+    const url = buildProxyUrl('/everything', params);
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -56,13 +67,12 @@ export const searchNews = async (query, fromDate = null) => {
  */
 export const fetchTopHeadlines = async (country = 'us') => {
   try {
-    const response = await api.get('/top-headlines', {
-      params: {
-        country: country,
-        apiKey: API_CONFIG.API_KEY,
-        pageSize: API_CONFIG.PAGE_SIZE,
-      },
+    const url = buildProxyUrl('/top-headlines', {
+      country: country,
+      apiKey: API_CONFIG.API_KEY,
+      pageSize: API_CONFIG.PAGE_SIZE,
     });
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
