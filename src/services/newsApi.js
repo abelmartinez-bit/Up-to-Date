@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { API_CONFIG } from '../config/constants';
 
+// Use Vercel serverless function in production, direct API in development
+const isProduction = process.env.NODE_ENV === 'production';
+const BASE_URL = isProduction ? '/api/news' : API_CONFIG.BASE_URL;
+
 const api = axios.create({
-  baseURL: API_CONFIG.BASE_URL,
+  baseURL: BASE_URL,
   timeout: 10000,
 });
 
@@ -11,16 +15,22 @@ const api = axios.create({
  */
 export const fetchNewsByCategory = async (categoryQuery, page = 1) => {
   try {
-    const response = await api.get('/everything', {
-      params: {
-        q: categoryQuery,
-        apiKey: API_CONFIG.API_KEY,
-        pageSize: API_CONFIG.PAGE_SIZE,
-        page: page,
-        sortBy: 'publishedAt',
-        language: 'en',
-      },
-    });
+    const params = {
+      q: categoryQuery,
+      pageSize: API_CONFIG.PAGE_SIZE,
+      page: page,
+      sortBy: 'publishedAt',
+      language: 'en',
+    };
+
+    // In production, add endpoint as a query param for the serverless function
+    if (isProduction) {
+      params.endpoint = '/everything';
+    } else {
+      params.apiKey = API_CONFIG.API_KEY;
+    }
+
+    const response = await api.get(isProduction ? '' : '/everything', { params });
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -34,7 +44,6 @@ export const searchNews = async (query, fromDate = null) => {
   try {
     const params = {
       q: query,
-      apiKey: API_CONFIG.API_KEY,
       pageSize: API_CONFIG.PAGE_SIZE,
       sortBy: 'publishedAt',
       language: 'en',
@@ -44,7 +53,14 @@ export const searchNews = async (query, fromDate = null) => {
       params.from = fromDate;
     }
 
-    const response = await api.get('/everything', { params });
+    // In production, add endpoint as a query param for the serverless function
+    if (isProduction) {
+      params.endpoint = '/everything';
+    } else {
+      params.apiKey = API_CONFIG.API_KEY;
+    }
+
+    const response = await api.get(isProduction ? '' : '/everything', { params });
     return response.data;
   } catch (error) {
     throw handleApiError(error);
@@ -56,13 +72,19 @@ export const searchNews = async (query, fromDate = null) => {
  */
 export const fetchTopHeadlines = async (country = 'us') => {
   try {
-    const response = await api.get('/top-headlines', {
-      params: {
-        country: country,
-        apiKey: API_CONFIG.API_KEY,
-        pageSize: API_CONFIG.PAGE_SIZE,
-      },
-    });
+    const params = {
+      country: country,
+      pageSize: API_CONFIG.PAGE_SIZE,
+    };
+
+    // In production, add endpoint as a query param for the serverless function
+    if (isProduction) {
+      params.endpoint = '/top-headlines';
+    } else {
+      params.apiKey = API_CONFIG.API_KEY;
+    }
+
+    const response = await api.get(isProduction ? '' : '/top-headlines', { params });
     return response.data;
   } catch (error) {
     throw handleApiError(error);
